@@ -1,3 +1,6 @@
+# 内部文件
+.mimocode/
+
 # 美术资源（放在云盘）
 assets/
 *.psd
