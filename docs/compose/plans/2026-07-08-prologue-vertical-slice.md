@@ -267,6 +267,8 @@ git commit -m "feat: add testable prologue push puzzle rules"
 - Create: `Game/Assets/Scripts/Player/PlayerController.cs`
 - Create: `Game/Assets/Scripts/UI/LevelUI.cs`
 - Create: `Game/Assets/Scenes/Prologue.scene`
+- Create: `Game/Assets/Scenes/MainMenu.scene` (placeholder only)
+- Modify: `Game/ProjectSettings/EditorBuildSettings.asset`
 
 **Interfaces:**
 - Consumes: `PushPuzzleRules.TryMove(...)`
@@ -470,6 +472,8 @@ Prologue.scene
 
 Use a 4x4 tutorial layout with exactly one core and one target. Keep the puzzle solvable in 3-5 moves.
 
+Add a tiny placeholder `MainMenu.scene` now so the win screen's back button has a valid scene target before Task 3 expands that menu.
+
 - [ ] **Step 4: Manually verify puzzle movement before dialogue wiring exists**
 
 Run: `打开 Prologue.scene -> 点击 Play -> 使用 WASD/方向键推动核心`
@@ -483,7 +487,7 @@ Expected:
 - [ ] **Step 5: Commit Task 2**
 
 ```bash
-git add Game/Assets/Scripts/Puzzle/CellMarker.cs Game/Assets/Scripts/Puzzle/PushableCore.cs Game/Assets/Scripts/Puzzle/CoreTarget.cs Game/Assets/Scripts/Puzzle/PrologueBoard.cs Game/Assets/Scripts/Player/PlayerController.cs Game/Assets/Scripts/UI/LevelUI.cs Game/Assets/Scenes/Prologue.scene
+git add Game/Assets/Scripts/Puzzle/CellMarker.cs Game/Assets/Scripts/Puzzle/PushableCore.cs Game/Assets/Scripts/Puzzle/CoreTarget.cs Game/Assets/Scripts/Puzzle/PrologueBoard.cs Game/Assets/Scripts/Player/PlayerController.cs Game/Assets/Scripts/UI/LevelUI.cs Game/Assets/Scenes/Prologue.scene Game/Assets/Scenes/MainMenu.scene Game/ProjectSettings/EditorBuildSettings.asset
 git commit -m "feat: add playable prologue puzzle board"
 ```
 
@@ -502,7 +506,8 @@ git commit -m "feat: add playable prologue puzzle board"
 - Create: `Game/Assets/Scripts/UI/NameInputUI.cs`
 - Create: `Game/Assets/Tests/EditMode/Dialogue/DialogueFormatterTests.cs`
 - Create: `Game/Assets/Data/Dialogue/PrologueDialogue.asset`
-- Create: `Game/Assets/Scenes/MainMenu.scene`
+- Modify: `Game/Assets/Scenes/MainMenu.scene`
+- Modify: `Game/Assets/Scenes/Prologue.scene`
 
 **Interfaces:**
 - Produces: `void GameManager.SetPlayerName(string playerName)`
