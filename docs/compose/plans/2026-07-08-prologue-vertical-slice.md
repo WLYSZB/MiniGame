@@ -85,7 +85,7 @@ Follow Tasks 1 -> 2 -> 3 -> 4 in order. Task 1 produces the only new logic primi
 
 ### Task 1: Testable Grid Puzzle Rules
 
-**Covers:** [S1], [S4], [S7]
+**Covers:** [S4], [S7]
 
 **Files:**
 - Create: `Game/Assets/Scripts/Puzzle/PushMoveResult.cs`
@@ -257,7 +257,7 @@ git commit -m "feat: add testable prologue push puzzle rules"
 
 ### Task 2: Runtime Puzzle Board And Prologue Scene
 
-**Covers:** [S1], [S4], [S5], [S6], [S7]
+**Covers:** [S4], [S5], [S6], [S7]
 
 **Files:**
 - Create: `Game/Assets/Scripts/Puzzle/CellMarker.cs`
