@@ -34,8 +34,11 @@ sysinfo.txt
 .codelyignore
 
 # 美术资源（放在云盘）
-assets/
+/assets/
 *.psd
+
+# 团结引擎 Assets 目录不排除
+!Game/Assets/
 *.png
 *.jpg
 *.jpeg
