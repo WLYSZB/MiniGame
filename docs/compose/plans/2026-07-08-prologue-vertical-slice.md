@@ -348,6 +348,7 @@ public class PlayerController : MonoBehaviour
 }
 
 // Game/Assets/Scripts/UI/LevelUI.cs
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class LevelUI : MonoBehaviour
@@ -361,7 +362,7 @@ public class LevelUI : MonoBehaviour
 
     public void OnBackToMenuClicked()
     {
-        GameManager.Instance.LoadMainMenu();
+        SceneManager.LoadScene("MainMenu");
     }
 }
 ```
@@ -383,7 +384,7 @@ public class PrologueBoard : MonoBehaviour
     [SerializeField] private CellMarker[] walls;
     [SerializeField] private LevelUI levelUI;
 
-    private bool inputEnabled;
+    [SerializeField] private bool inputEnabled = true;
 
     private void Awake()
     {
@@ -471,7 +472,7 @@ Use a 4x4 tutorial layout with exactly one core and one target. Keep the puzzle 
 
 - [ ] **Step 4: Manually verify puzzle movement before dialogue wiring exists**
 
-Run: `打开 Prologue.scene -> 在 Inspector 里把 PrologueBoard.inputEnabled 临时设为 true -> 点击 Play -> 使用 WASD/方向键推动核心`
+Run: `打开 Prologue.scene -> 点击 Play -> 使用 WASD/方向键推动核心`
 
 Expected:
 - Player moves exactly one cell per key press.
