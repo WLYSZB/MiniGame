@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class LevelUI : MonoBehaviour
 {
@@ -29,7 +28,10 @@ public class LevelUI : MonoBehaviour
 
     public void OnBackToMenuClicked()
     {
-        SceneManager.LoadScene("MainMenu");
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.LoadMainMenu();
+        }
     }
 
     private void OnGUI()
