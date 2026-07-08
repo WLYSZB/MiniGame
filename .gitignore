@@ -1,5 +1,6 @@
 # 内部文件
 .mimocode/
+.worktrees/
 
 # 团结引擎 / Unity
 [Ll]ibrary/
