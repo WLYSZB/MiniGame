@@ -1,6 +1,38 @@
 # 内部文件
 .mimocode/
 
+# 团结引擎 / Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Ll]ogs/
+[Uu]serSettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.apk
+*.aab
+*.unitypackage
+*.crashlyticsmappingfile
+sysinfo.txt
+
+# 团结引擎 .codely
+.codely-cli/
+.com-unity-codely.json
+.codelyignore
+
 # 美术资源（放在云盘）
 assets/
 *.psd
@@ -26,11 +58,8 @@ desktop.ini
 # IDE
 .vscode/
 .idea/
-*.suo
-*.user
 
 # 构建产物
-build/
 dist/
 *.exe
 *.dll
