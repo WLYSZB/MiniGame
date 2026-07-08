@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:yousandi.cn,2023:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33333333333333333333333333333333, type: 3}
+  m_Name: PrologueDialogue
+  m_EditorClassIdentifier: 
+  lines:
+  - speaker: Planet
+    text: "My stabilizer is wrecked again."
+  - speaker: Planet
+    text: "You are carrying the spare core now, {playerName}."
+  - speaker: Player
+    text: "Right. Push the core onto the workshop target."
+  - speaker: Planet
+    text: "Exactly. Keep it simple and do not break anything else."
+  - speaker: Planet
+    text: "Finish the tutorial puzzle, then head back to the main menu."

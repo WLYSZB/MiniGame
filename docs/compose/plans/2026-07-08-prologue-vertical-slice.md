@@ -50,6 +50,8 @@
   Scene-facing board controller that consumes `PushPuzzleRules` and updates transforms.
 - `Game/Assets/Scripts/Player/PlayerController.cs`
   Reads input and forwards one grid step at a time to `PrologueBoard`.
+- `Game/Assets/Scripts/UI/LevelUI.cs`
+  Shows the win panel and returns to the main menu.
 - `Game/Assets/Scripts/Dialogue/DialogueData.cs`
   ScriptableObject holding ordered prologue lines.
 - `Game/Assets/Scripts/Dialogue/DialogueFormatter.cs`
@@ -62,8 +64,6 @@
   Opens the name input panel.
 - `Game/Assets/Scripts/UI/NameInputUI.cs`
   Validates name input and starts the prologue.
-- `Game/Assets/Scripts/UI/LevelUI.cs`
-  Shows the win panel and returns to the main menu.
 - `Game/Assets/Tests/EditMode/Puzzle/PushPuzzleRulesTests.cs`
   EditMode tests for grid puzzle rules.
 - `Game/Assets/Tests/EditMode/Dialogue/DialogueFormatterTests.cs`
@@ -85,7 +85,7 @@ Follow Tasks 1 -> 2 -> 3 -> 4 in order. Task 1 produces the only new logic primi
 
 ### Task 1: Testable Grid Puzzle Rules
 
-**Covers:** [S1], [S4], [S7]
+**Covers:** [S4], [S7]
 
 **Files:**
 - Create: `Game/Assets/Scripts/Puzzle/PushMoveResult.cs`
@@ -257,7 +257,7 @@ git commit -m "feat: add testable prologue push puzzle rules"
 
 ### Task 2: Runtime Puzzle Board And Prologue Scene
 
-**Covers:** [S1], [S4], [S5], [S6], [S7]
+**Covers:** [S4], [S5], [S6], [S7]
 
 **Files:**
 - Create: `Game/Assets/Scripts/Puzzle/CellMarker.cs`
@@ -265,7 +265,10 @@ git commit -m "feat: add testable prologue push puzzle rules"
 - Create: `Game/Assets/Scripts/Puzzle/CoreTarget.cs`
 - Create: `Game/Assets/Scripts/Puzzle/PrologueBoard.cs`
 - Create: `Game/Assets/Scripts/Player/PlayerController.cs`
+- Create: `Game/Assets/Scripts/UI/LevelUI.cs`
 - Create: `Game/Assets/Scenes/Prologue.scene`
+- Create: `Game/Assets/Scenes/MainMenu.scene` (placeholder only)
+- Modify: `Game/ProjectSettings/EditorBuildSettings.asset`
 
 **Interfaces:**
 - Consumes: `PushPuzzleRules.TryMove(...)`
@@ -345,6 +348,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 }
+
+// Game/Assets/Scripts/UI/LevelUI.cs
+using UnityEngine.SceneManagement;
+using UnityEngine;
+
+public class LevelUI : MonoBehaviour
+{
+    [SerializeField] private GameObject winPanel;
+
+    public void ShowWinPanel()
+    {
+        winPanel.SetActive(true);
+    }
+
+    public void OnBackToMenuClicked()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+}
 ```
 
 - [ ] **Step 2: Implement the board controller that consumes Task 1 rules**
@@ -364,7 +386,7 @@ public class PrologueBoard : MonoBehaviour
     [SerializeField] private CellMarker[] walls;
     [SerializeField] private LevelUI levelUI;
 
-    private bool inputEnabled;
+    [SerializeField] private bool inputEnabled = true;
 
     private void Awake()
     {
@@ -435,12 +457,6 @@ public class PrologueBoard : MonoBehaviour
 Prologue.scene
 |- Main Camera
 |- EventSystem
-|- PrologueSceneController
-|- DialogueCanvas
-|  |- DialoguePanel
-|  |  |- SpeakerNameText (TMP)
-|  |  |- DialogueText (TMP)
-|  |  |- NextButton
 |- LevelCanvas
 |  |- WinPanel
 |     |- WinText
@@ -456,9 +472,11 @@ Prologue.scene
 
 Use a 4x4 tutorial layout with exactly one core and one target. Keep the puzzle solvable in 3-5 moves.
 
+Add a tiny placeholder `MainMenu.scene` now so the win screen's back button has a valid scene target before Task 3 expands that menu.
+
 - [ ] **Step 4: Manually verify puzzle movement before dialogue wiring exists**
 
-Run: `打开 Prologue.scene -> 在 Inspector 里把 PrologueBoard.inputEnabled 临时设为 true -> 点击 Play -> 使用 WASD/方向键推动核心`
+Run: `打开 Prologue.scene -> 点击 Play -> 使用 WASD/方向键推动核心`
 
 Expected:
 - Player moves exactly one cell per key press.
@@ -469,13 +487,13 @@ Expected:
 - [ ] **Step 5: Commit Task 2**
 
 ```bash
-git add Game/Assets/Scripts/Puzzle/CellMarker.cs Game/Assets/Scripts/Puzzle/PushableCore.cs Game/Assets/Scripts/Puzzle/CoreTarget.cs Game/Assets/Scripts/Puzzle/PrologueBoard.cs Game/Assets/Scripts/Player/PlayerController.cs Game/Assets/Scenes/Prologue.scene
+git add Game/Assets/Scripts/Puzzle/CellMarker.cs Game/Assets/Scripts/Puzzle/PushableCore.cs Game/Assets/Scripts/Puzzle/CoreTarget.cs Game/Assets/Scripts/Puzzle/PrologueBoard.cs Game/Assets/Scripts/Player/PlayerController.cs Game/Assets/Scripts/UI/LevelUI.cs Game/Assets/Scenes/Prologue.scene Game/Assets/Scenes/MainMenu.scene Game/ProjectSettings/EditorBuildSettings.asset
 git commit -m "feat: add playable prologue puzzle board"
 ```
 
 ### Task 3: Dialogue, Naming, And Scene Flow
 
-**Covers:** [S2], [S3], [S5], [S6], [S7]
+**Covers:** [S2], [S3], [S6], [S7]
 
 **Files:**
 - Create: `Game/Assets/Scripts/Core/GameManager.cs`
@@ -486,10 +504,10 @@ git commit -m "feat: add playable prologue puzzle board"
 - Create: `Game/Assets/Scripts/UI/DialogueUI.cs`
 - Create: `Game/Assets/Scripts/UI/MainMenuUI.cs`
 - Create: `Game/Assets/Scripts/UI/NameInputUI.cs`
-- Create: `Game/Assets/Scripts/UI/LevelUI.cs`
 - Create: `Game/Assets/Tests/EditMode/Dialogue/DialogueFormatterTests.cs`
 - Create: `Game/Assets/Data/Dialogue/PrologueDialogue.asset`
-- Create: `Game/Assets/Scenes/MainMenu.scene`
+- Modify: `Game/Assets/Scenes/MainMenu.scene`
+- Modify: `Game/Assets/Scenes/Prologue.scene`
 
 **Interfaces:**
 - Produces: `void GameManager.SetPlayerName(string playerName)`
@@ -638,23 +656,6 @@ public class NameInputUI : MonoBehaviour
     }
 }
 
-// Game/Assets/Scripts/UI/LevelUI.cs
-using UnityEngine;
-
-public class LevelUI : MonoBehaviour
-{
-    [SerializeField] private GameObject winPanel;
-
-    public void ShowWinPanel()
-    {
-        winPanel.SetActive(true);
-    }
-
-    public void OnBackToMenuClicked()
-    {
-        GameManager.Instance.LoadMainMenu();
-    }
-}
 ```
 
 - [ ] **Step 4: Implement the dialogue runtime and scene controller**
@@ -773,6 +774,7 @@ MainMenu.scene
 ```
 
 In `Prologue.scene`, wire:
+- `DialogueCanvas` and `DialoguePanel` hierarchy.
 - `DialogueUI.Show()` and `DialogueManager.OnNextClicked()` to the next button.
 - `LevelUI.OnBackToMenuClicked()` to the win panel button.
 - `PrologueSceneController` references to `DialogueData`, `DialogueManager`, and `PrologueBoard`.
@@ -786,7 +788,7 @@ Expected: `PushPuzzleRulesTests` and `DialogueFormatterTests` all pass.
 - [ ] **Step 7: Commit Task 3**
 
 ```bash
-git add Game/Assets/Scripts/Core/GameManager.cs Game/Assets/Scripts/Core/PrologueSceneController.cs Game/Assets/Scripts/Dialogue/DialogueData.cs Game/Assets/Scripts/Dialogue/DialogueFormatter.cs Game/Assets/Scripts/Dialogue/DialogueManager.cs Game/Assets/Scripts/UI/DialogueUI.cs Game/Assets/Scripts/UI/MainMenuUI.cs Game/Assets/Scripts/UI/NameInputUI.cs Game/Assets/Scripts/UI/LevelUI.cs Game/Assets/Tests/EditMode/Dialogue/DialogueFormatterTests.cs Game/Assets/Data/Dialogue/PrologueDialogue.asset Game/Assets/Scenes/MainMenu.scene
+git add Game/Assets/Scripts/Core/GameManager.cs Game/Assets/Scripts/Core/PrologueSceneController.cs Game/Assets/Scripts/Dialogue/DialogueData.cs Game/Assets/Scripts/Dialogue/DialogueFormatter.cs Game/Assets/Scripts/Dialogue/DialogueManager.cs Game/Assets/Scripts/UI/DialogueUI.cs Game/Assets/Scripts/UI/MainMenuUI.cs Game/Assets/Scripts/UI/NameInputUI.cs Game/Assets/Tests/EditMode/Dialogue/DialogueFormatterTests.cs Game/Assets/Data/Dialogue/PrologueDialogue.asset Game/Assets/Scenes/MainMenu.scene Game/Assets/Scenes/Prologue.scene
 git commit -m "feat: add prologue menu and dialogue flow"
 ```
 
