@@ -493,7 +493,7 @@ git commit -m "feat: add playable prologue puzzle board"
 
 ### Task 3: Dialogue, Naming, And Scene Flow
 
-**Covers:** [S2], [S3], [S5], [S6], [S7]
+**Covers:** [S2], [S3], [S6], [S7]
 
 **Files:**
 - Create: `Game/Assets/Scripts/Core/GameManager.cs`
