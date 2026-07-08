@@ -48,7 +48,8 @@ public class NameInputUI : MonoBehaviour
         }
 
         if (GUI.Button(new Rect(panelRect.x + 16f, panelRect.y + 120f, 320f, 36f), "Confirm") ||
-            (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Return))
+            (Event.current.type == EventType.KeyDown &&
+                (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter)))
         {
             OnConfirmClicked();
         }

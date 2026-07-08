@@ -30,7 +30,7 @@ public class DialogueUI : MonoBehaviour
         var panelRect = new Rect(24f, Screen.height - 190f, Screen.width - 48f, 166f);
         GUI.Box(panelRect, string.Empty);
         GUI.Label(new Rect(panelRect.x + 16f, panelRect.y + 16f, panelRect.width - 32f, 24f), speaker);
-        GUI.Label(new Rect(panelRect.x + 16f, panelRect.y + 48f, panelRect.width - 32f, 72f), text);
+        GUI.TextArea(new Rect(panelRect.x + 16f, panelRect.y + 48f, panelRect.width - 32f, 72f), text);
         GUI.Label(new Rect(panelRect.x + 16f, panelRect.y + 126f, panelRect.width - 32f, 24f), "Click, Space, or Enter to continue.");
     }
 }

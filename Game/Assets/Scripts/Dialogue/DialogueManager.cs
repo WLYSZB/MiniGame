@@ -29,6 +29,11 @@ public class DialogueManager : MonoBehaviour
 
     public void Play(DialogueData dialogueData, Action finished)
     {
+        if (dialogueUI == null)
+        {
+            Debug.LogWarning("[DialogueManager] dialogueUI is null – dialogue will not be displayed. Assign it in the Inspector.");
+        }
+
         currentData = dialogueData;
         currentIndex = 0;
         onFinished = finished;
