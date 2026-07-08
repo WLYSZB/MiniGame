@@ -9,6 +9,11 @@ public static class PushPuzzleRules
         HashSet<Vector2Int> wallCells,
         HashSet<Vector2Int> coreCells)
     {
+        if (Mathf.Abs(direction.x) + Mathf.Abs(direction.y) != 1)
+        {
+            return new PushMoveResult(false, playerCell, false, default, default);
+        }
+
         var nextPlayerCell = playerCell + direction;
         if (wallCells.Contains(nextPlayerCell))
         {
