@@ -205,7 +205,7 @@ public class DialogueSystem : MonoBehaviour
             return;
         }
 
-        Debug.Log($"ShowLine: {line.speaker} - {line.text}");
+        Debug.Log($"ShowLine: index={currentLineIndex}, speaker={line.speaker}, text={line.text}");
 
         // 更新角色亮度和表情
         UpdateCharacterHighlight(line.speaker);
@@ -221,7 +221,8 @@ public class DialogueSystem : MonoBehaviour
         // 打字机效果显示文本
         if (typewriter != null && dialogueText != null)
         {
-            typewriter.TypeText(line.text);
+            // 直接显示完整文本，不用打字机效果
+            dialogueText.text = line.text;
         }
         else
         {
@@ -263,21 +264,27 @@ public class DialogueSystem : MonoBehaviour
     /// </summary>
     void OnAdvance()
     {
-        if (typewriter.IsTyping)
+        Debug.Log($"OnAdvance called, IsTyping={typewriter?.IsTyping}, currentLineIndex={currentLineIndex}");
+
+        if (typewriter != null && typewriter.IsTyping)
         {
             // 跳过打字，直接显示完整文本
+            Debug.Log("Skipping typewriter");
             typewriter.Skip();
             return;
         }
 
         // 下一句
         currentLineIndex++;
+        Debug.Log($"Advancing to line {currentLineIndex}");
+
         if (currentLineIndex < currentSequence.lines.Length)
         {
             ShowLine(currentSequence.lines[currentLineIndex]);
         }
         else
         {
+            Debug.Log("Dialogue complete, ending...");
             EndDialogue();
         }
     }
