@@ -117,7 +117,18 @@ public class PushableBox : MonoBehaviour
         if (allOnTarget)
         {
             Debug.Log("Level Complete!");
-            FindObjectOfType<LevelCompleteUI>()?.Show();
+
+            // 优先使用LevelCompleteTrigger（先对话再完成）
+            LevelCompleteTrigger trigger = FindObjectOfType<LevelCompleteTrigger>();
+            if (trigger != null)
+            {
+                trigger.OnLevelComplete();
+            }
+            else
+            {
+                // 直接显示完成界面
+                FindObjectOfType<LevelCompleteUI>()?.Show();
+            }
         }
     }
 }
