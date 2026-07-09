@@ -34,25 +34,8 @@ sysinfo.txt
 .com-unity-codely.json
 .codelyignore
 
-# 美术资源（放在云盘）
-/assets/
+# 美术源文件
 *.psd
-
-# 团结引擎 Assets 目录不排除
-!Game/Assets/
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.bmp
-*.tga
-*.svg
-*.mp3
-*.wav
-*.ogg
-*.mp4
-*.avi
-*.mov
 
 # 系统文件
 .DS_Store
