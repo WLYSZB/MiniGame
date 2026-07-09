@@ -22,8 +22,8 @@ public class DialogueSystem : MonoBehaviour
     public Transform characterContainer; // 角色容器
     [Range(0.1f, 1f)]
     public float characterScale = 0.35f; // 角色缩放比例（默认0.35）
-    public float leftPositionX = -6f;    // 左侧角色X位置
-    public float rightPositionX = 6f;    // 右侧角色X位置
+    public float leftPositionX = -9f;    // 左侧角色X位置
+    public float rightPositionX = 9f;    // 右侧角色X位置
     public float characterY = -1f;       // 角色Y位置（略低于中心）
 
     private List<DialogueCharacter> characters = new List<DialogueCharacter>();
@@ -37,8 +37,12 @@ public class DialogueSystem : MonoBehaviour
 
     void Awake()
     {
-        dialoguePanel.SetActive(false);
-        skipButton.onClick.AddListener(OnSkipAll);
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(false);
+
+        if (skipButton != null)
+            skipButton.onClick.AddListener(OnSkipAll);
+
         LoadDialogueData();
     }
 
@@ -74,6 +78,8 @@ public class DialogueSystem : MonoBehaviour
     /// </summary>
     public void StartDialogue(string sequenceId, System.Action onComplete = null)
     {
+        Debug.Log($"StartDialogue called with id: {sequenceId}");
+
         if (dialogueData == null)
         {
             LoadDialogueData();
@@ -85,8 +91,11 @@ public class DialogueSystem : MonoBehaviour
             return;
         }
 
+        Debug.Log($"Loaded {dialogueData.sequences.Length} dialogue sequences");
+
         foreach (var seq in dialogueData.sequences)
         {
+            Debug.Log($"Sequence id: {seq.id}");
             if (seq.id == sequenceId)
             {
                 currentSequence = seq;
@@ -100,16 +109,21 @@ public class DialogueSystem : MonoBehaviour
             return;
         }
 
+        Debug.Log($"Found sequence: {currentSequence.id}, lines: {currentSequence.lines.Length}");
+
         onDialogueComplete = onComplete;
         currentLineIndex = 0;
         isDialogueActive = true;
-        dialoguePanel.SetActive(true);
+
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(true);
 
         // 创建角色立绘
         SpawnCharacters(currentSequence.characters);
 
         // 显示第一句
-        ShowLine(currentSequence.lines[currentLineIndex]);
+        if (currentSequence.lines.Length > 0)
+            ShowLine(currentSequence.lines[currentLineIndex]);
     }
 
     /// <summary>
@@ -142,7 +156,19 @@ public class DialogueSystem : MonoBehaviour
             SpriteRenderer sr = charObj.AddComponent<SpriteRenderer>();
 
             // 加载默认立绘
-            Sprite defaultSprite = Resources.Load<Sprite>($"Sprites/Characters/{info.defaultPortraitName}");
+            string spritePath = $"Sprites/Characters/{info.defaultPortraitName}";
+            Debug.Log($"Loading sprite from: {spritePath}");
+            Sprite defaultSprite = Resources.Load<Sprite>(spritePath);
+
+            if (defaultSprite == null)
+            {
+                Debug.LogWarning($"Sprite not found: {spritePath}");
+                // 尝试不带前缀加载
+                defaultSprite = Resources.Load<Sprite>($"Sprites/Characters/{info.characterName}_默认");
+                if (defaultSprite != null)
+                    Debug.Log($"Found sprite with fallback name");
+            }
+
             sr.sprite = defaultSprite;
             // 图层：背景是-10，UI是更高，角色在中间（5）
             sr.sortingOrder = 5;
