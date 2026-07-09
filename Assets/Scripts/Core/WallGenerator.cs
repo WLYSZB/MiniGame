@@ -71,7 +71,8 @@ public class WallGenerator : MonoBehaviour
                 Vector3 pos = new Vector3(x - width / 2, y - height / 2, 0);
                 GameObject floor = Instantiate(floorPrefab, pos, Quaternion.identity, transform);
                 floor.name = $"Floor_{x}_{y}";
-                floor.transform.localScale = Vector3.one * 0.95f; // 稍微缩小，留一点缝隙
+                // 保持原始大小，不额外缩放
+                floor.transform.localScale = Vector3.one;
             }
         }
     }
