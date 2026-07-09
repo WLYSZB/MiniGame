@@ -3,19 +3,19 @@ using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// 地图界面 - 水平排列关卡节点，可点击重玩已通过的关卡
+/// Map screen - horizontal level nodes
 /// </summary>
 public class MapScreen : MonoBehaviour
 {
     [Header("UI")]
     public Button backButton;
-    public Transform nodeContainer;     // 关卡节点容器
+    public Transform nodeContainer;
 
     [Header("Prefabs")]
-    public GameObject mapNodePrefab;    // 关卡节点Prefab
+    public GameObject mapNodePrefab;
 
     [Header("Map Data")]
-    public MapNodeData[] mapNodes;      // 关卡节点配置
+    public MapNodeData[] mapNodes;
 
     void Awake()
     {
@@ -24,11 +24,9 @@ public class MapScreen : MonoBehaviour
 
     public void RefreshMap()
     {
-        // 清除旧节点
         foreach (Transform child in nodeContainer)
             Destroy(child.gameObject);
 
-        // 水平排列关卡节点
         float xOffset = 0f;
         float spacing = 300f;
 
@@ -38,13 +36,14 @@ public class MapScreen : MonoBehaviour
             RectTransform rect = nodeObj.GetComponent<RectTransform>();
             rect.anchoredPosition = new Vector2(xOffset, 0);
 
-            // 设置节点内容
             MapNodeUI nodeUI = nodeObj.GetComponent<MapNodeUI>();
-            nodeUI.Setup(node);
+            if (nodeUI != null)
+                nodeUI.Setup(node);
 
-            // 点击事件
             int levelIndex = node.levelIndex;
-            nodeObj.GetComponent<Button>().onClick.AddListener(() => OnNodeClick(levelIndex));
+            Button btn = nodeObj.GetComponent<Button>();
+            if (btn != null)
+                btn.onClick.AddListener(() => OnNodeClick(levelIndex));
 
             xOffset += spacing;
         }
@@ -52,7 +51,7 @@ public class MapScreen : MonoBehaviour
 
     void OnNodeClick(int levelIndex)
     {
-        if (GameManager.Instance.IsLevelUnlocked(levelIndex))
+        if (GameManager.Instance != null && GameManager.Instance.IsLevelUnlocked(levelIndex))
         {
             GameManager.Instance.LoadLevel(levelIndex);
         }
@@ -60,7 +59,9 @@ public class MapScreen : MonoBehaviour
 
     void OnBack()
     {
-        GetComponentInParent<MainMenu>().mainPanel.SetActive(true);
+        MainMenu mainMenu = GetComponentInParent<MainMenu>();
+        if (mainMenu != null && mainMenu.mainPanel != null)
+            mainMenu.mainPanel.SetActive(true);
         gameObject.SetActive(false);
     }
 }
