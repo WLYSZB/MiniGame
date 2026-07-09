@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/OpeningScene.scene
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/PrologueDialogue.scene
+    guid: 500298402e7de844d9821d6fa5276eb8
+  - enabled: 1
+    path: Assets/Scenes/Prologue.scene
+    guid: 3ecece3fc63fabc46931806741a81672
   m_BuildProfiles: []
   m_configObjects: {}
   m_SlimFeaturesWeixinMiniGame:

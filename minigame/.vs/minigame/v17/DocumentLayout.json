@@ -1,0 +1,62 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\19774\\Desktop\\MiniGame\\minigame\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9F94E66D-0073-06B6-1765-F37AFFF31CA8}|Assembly-CSharp.csproj|c:\\users\\19774\\desktop\\minigame\\minigame\\assets\\scripts\\core\\wallgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F94E66D-0073-06B6-1765-F37AFFF31CA8}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\wallgenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F94E66D-0073-06B6-1765-F37AFFF31CA8}|Assembly-CSharp.csproj|c:\\users\\19774\\desktop\\minigame\\minigame\\assets\\scripts\\scene\\dialoguescenetransition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F94E66D-0073-06B6-1765-F37AFFF31CA8}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\scene\\dialoguescenetransition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "WallGenerator.cs",
+              "DocumentMoniker": "C:\\Users\\19774\\Desktop\\MiniGame\\minigame\\Assets\\Scripts\\Core\\WallGenerator.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\WallGenerator.cs",
+              "ToolTip": "C:\\Users\\19774\\Desktop\\MiniGame\\minigame\\Assets\\Scripts\\Core\\WallGenerator.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Core\\WallGenerator.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAIwBQAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T17:26:08.76Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DialogueSceneTransition.cs",
+              "DocumentMoniker": "C:\\Users\\19774\\Desktop\\MiniGame\\minigame\\Assets\\Scripts\\Scene\\DialogueSceneTransition.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Scene\\DialogueSceneTransition.cs",
+              "ToolTip": "C:\\Users\\19774\\Desktop\\MiniGame\\minigame\\Assets\\Scripts\\Scene\\DialogueSceneTransition.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Scene\\DialogueSceneTransition.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvxEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T16:12:41.278Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
