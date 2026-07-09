@@ -1,25 +1,28 @@
 using UnityEngine;
 
 /// <summary>
-/// Dialogue scene transition control
+/// Dialogue scene transition control - singleton to prevent duplicate calls
 /// </summary>
 public class DialogueSceneTransition : MonoBehaviour
 {
     public DialogueSystem dialogueSystem;
     public string nextScene = "Prologue";
-    private bool hasStarted = false;
+
+    private static bool hasInstance = false;
 
     void Start()
     {
         Debug.Log("DialogueSceneTransition.Start called");
 
-        if (hasStarted)
+        // Prevent duplicate instances
+        if (hasInstance)
         {
-            Debug.Log("Already started, skipping");
+            Debug.Log("Another DialogueSceneTransition already exists, destroying this one");
+            Destroy(gameObject);
             return;
         }
 
-        hasStarted = true;
+        hasInstance = true;
 
         if (dialogueSystem != null)
         {
@@ -32,5 +35,10 @@ public class DialogueSceneTransition : MonoBehaviour
         {
             Debug.LogError("DialogueSystem is not assigned!");
         }
+    }
+
+    void OnDestroy()
+    {
+        hasInstance = false;
     }
 }

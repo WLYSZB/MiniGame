@@ -98,11 +98,8 @@ public class DialogueSystem : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Loaded {dialogueData.sequences.Length} dialogue sequences");
-
         foreach (var seq in dialogueData.sequences)
         {
-            Debug.Log($"Sequence id: {seq.id}");
             if (seq.id == sequenceId)
             {
                 currentSequence = seq;
@@ -116,7 +113,7 @@ public class DialogueSystem : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Found sequence: {currentSequence.id}, lines: {currentSequence.lines.Length}");
+        Debug.Log($"Starting dialogue: {currentSequence.id}, lines: {currentSequence.lines.Length}");
 
         onDialogueComplete = onComplete;
         currentLineIndex = 0;
