@@ -26,14 +26,21 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        mainPanel.SetActive(true);
-        mapPanel.SetActive(false);
+        if (mainPanel != null)
+            mainPanel.SetActive(true);
+        if (mapPanel != null)
+            mapPanel.SetActive(false);
 
-        startButton.onClick.AddListener(OnStart);
-        mapButton.onClick.AddListener(OnMap);
-        quitButton.onClick.AddListener(OnQuit);
+        if (startButton != null)
+            startButton.onClick.AddListener(OnStart);
+        if (mapButton != null)
+            mapButton.onClick.AddListener(OnMap);
+        if (quitButton != null)
+            quitButton.onClick.AddListener(OnQuit);
 
-        GameManager.Instance.LoadProgress();
+        if (GameManager.Instance != null)
+            GameManager.Instance.LoadProgress();
+
         DisplayUnlockedNPCs();
     }
 
@@ -57,10 +64,23 @@ public class MainMenu : MonoBehaviour
 
     void OnStart()
     {
+        Debug.Log("OnStart clicked");
+
+        if (nameInputUI == null)
+        {
+            Debug.LogError("nameInputUI is not assigned!");
+            return;
+        }
+
+        Debug.Log("Showing name input UI");
         nameInputUI.Show(name =>
         {
-            GameManager.Instance.PlayerName = name;
-            GameManager.Instance.LoadLevel(0);
+            Debug.Log($"Player name: {name}");
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.PlayerName = name;
+                GameManager.Instance.LoadLevel(0);
+            }
         });
     }
 
