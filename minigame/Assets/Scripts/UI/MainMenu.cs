@@ -51,6 +51,13 @@ public class MainMenu : MonoBehaviour
 
     void DisplayUnlockedNPCs()
     {
+        // 如果没有NPC预制体或容器，跳过
+        if (npcPrefab == null || npcContainer == null)
+        {
+            Debug.LogWarning("NPC Prefab or Container not assigned, skipping NPC display");
+            return;
+        }
+
         // 清除旧NPC
         foreach (Transform child in npcContainer)
             Destroy(child.gameObject);
@@ -58,11 +65,16 @@ public class MainMenu : MonoBehaviour
         // 显示已解锁的NPC
         foreach (var npc in availableNPCs)
         {
-            if (GameManager.Instance.IsLevelUnlocked(npc.unlockLevel))
+            if (GameManager.Instance != null && GameManager.Instance.IsLevelUnlocked(npc.unlockLevel))
             {
                 GameObject npcObj = Instantiate(npcPrefab, npcContainer);
-                npcObj.GetComponentInChildren<SpriteRenderer>().sprite = npc.portrait;
-                npcObj.GetComponentInChildren<TextMeshProUGUI>().text = npc.characterName;
+                SpriteRenderer sr = npcObj.GetComponentInChildren<SpriteRenderer>();
+                if (sr != null && npc.portrait != null)
+                    sr.sprite = npc.portrait;
+
+                TextMeshProUGUI tmp = npcObj.GetComponentInChildren<TextMeshProUGUI>();
+                if (tmp != null)
+                    tmp.text = npc.characterName;
             }
         }
     }
