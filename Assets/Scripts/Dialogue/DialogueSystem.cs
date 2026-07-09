@@ -78,6 +78,13 @@ public class DialogueSystem : MonoBehaviour
     /// </summary>
     public void StartDialogue(string sequenceId, System.Action onComplete = null)
     {
+        // 如果对话已经在进行中，跳过
+        if (isDialogueActive)
+        {
+            Debug.Log("Dialogue already active, skipping StartDialogue call");
+            return;
+        }
+
         Debug.Log($"StartDialogue called with id: {sequenceId}");
 
         if (dialogueData == null)
