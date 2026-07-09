@@ -38,9 +38,14 @@ public class MainMenu : MonoBehaviour
         if (quitButton != null)
             quitButton.onClick.AddListener(OnQuit);
 
-        if (GameManager.Instance != null)
-            GameManager.Instance.LoadProgress();
+        // 确保GameManager存在
+        if (GameManager.Instance == null)
+        {
+            GameObject gm = new GameObject("GameManager");
+            gm.AddComponent<GameManager>();
+        }
 
+        GameManager.Instance.LoadProgress();
         DisplayUnlockedNPCs();
     }
 
@@ -76,11 +81,16 @@ public class MainMenu : MonoBehaviour
         nameInputUI.Show(name =>
         {
             Debug.Log($"Player name: {name}");
-            if (GameManager.Instance != null)
+
+            // 确保GameManager存在
+            if (GameManager.Instance == null)
             {
-                GameManager.Instance.PlayerName = name;
-                GameManager.Instance.LoadLevel(0);
+                GameObject gm = new GameObject("GameManager");
+                gm.AddComponent<GameManager>();
             }
+
+            GameManager.Instance.PlayerName = name;
+            GameManager.Instance.LoadLevel(0);
         });
     }
 
