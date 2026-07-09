@@ -9,7 +9,8 @@ public class OpeningVideo : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
     public Button skipButton;
-    public RawImage videoDisplay;  // 视频显示UI
+    public RawImage videoDisplay;    // 视频显示UI
+    public Image fadeOverlay;        // 淡入淡出遮罩
 
     void Start()
     {
@@ -26,7 +27,7 @@ public class OpeningVideo : MonoBehaviour
         }
 
         if (skipButton != null)
-            skipButton.onClick.AddListener(SkipVideo);
+            skipButton.onClick.AddListener(OnSkipButtonClicked);
     }
 
     void OnVideoEnd(VideoPlayer vp)
@@ -35,7 +36,13 @@ public class OpeningVideo : MonoBehaviour
         SceneLoader.Instance?.LoadScene(SceneLoader.PROLOGUE_DIALOGUE);
     }
 
-    void SkipVideo()
+    // public方法，可以被OnClick调用
+    public void OnSkipButtonClicked()
+    {
+        SkipVideo();
+    }
+
+    public void SkipVideo()
     {
         if (videoPlayer != null && videoPlayer.isPlaying)
             videoPlayer.Stop();
