@@ -35,6 +35,9 @@ public class DialogueSystem : MonoBehaviour
     // 对话数据缓存
     private DialogueContainer dialogueData;
 
+    // 静态标志，防止多个实例同时开始对话
+    private static bool staticDialogueStarted = false;
+
     void Awake()
     {
         if (dialoguePanel != null)
@@ -78,14 +81,17 @@ public class DialogueSystem : MonoBehaviour
     /// </summary>
     public void StartDialogue(string sequenceId, System.Action onComplete = null)
     {
-        Debug.Log($"StartDialogue called with id: {sequenceId}, isDialogueActive={isDialogueActive}");
+        Debug.Log($"StartDialogue called with id: {sequenceId}, isDialogueActive={isDialogueActive}, staticFlag={staticDialogueStarted}");
 
         // 如果对话已经在进行中，跳过
-        if (isDialogueActive)
+        if (isDialogueActive || staticDialogueStarted)
         {
-            Debug.Log("Dialogue already active, skipping StartDialogue call");
+            Debug.Log("Dialogue already active or started, skipping StartDialogue call");
             return;
         }
+
+        // 设置静态标志
+        staticDialogueStarted = true;
 
         if (dialogueData == null)
         {
@@ -304,7 +310,10 @@ public class DialogueSystem : MonoBehaviour
     void EndDialogue()
     {
         isDialogueActive = false;
-        dialoguePanel.SetActive(false);
+        staticDialogueStarted = false;
+
+        if (dialoguePanel != null)
+            dialoguePanel.SetActive(false);
 
         // 清除角色
         foreach (var character in characters)

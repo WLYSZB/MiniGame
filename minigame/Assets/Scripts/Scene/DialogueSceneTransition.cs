@@ -1,44 +1,52 @@
 using UnityEngine;
 
 /// <summary>
-/// Dialogue scene transition control - singleton to prevent duplicate calls
+/// Dialogue scene transition - simple version
 /// </summary>
 public class DialogueSceneTransition : MonoBehaviour
 {
     public DialogueSystem dialogueSystem;
     public string nextScene = "Prologue";
 
-    private static bool hasInstance = false;
+    private bool hasStartedDialogue = false;
 
-    void Start()
+    void Awake()
     {
-        Debug.Log("DialogueSceneTransition.Start called");
-
-        // Prevent duplicate instances
-        if (hasInstance)
+        // Disable this script if dialogue already started
+        if (hasStartedDialogue)
         {
-            Debug.Log("Another DialogueSceneTransition already exists, destroying this one");
-            Destroy(gameObject);
+            enabled = false;
             return;
-        }
-
-        hasInstance = true;
-
-        if (dialogueSystem != null)
-        {
-            dialogueSystem.StartDialogue("prologue_start", () =>
-            {
-                SceneLoader.Instance?.LoadScene(nextScene);
-            });
-        }
-        else
-        {
-            Debug.LogError("DialogueSystem is not assigned!");
         }
     }
 
-    void OnDestroy()
+    void Start()
     {
-        hasInstance = false;
+        Debug.Log("DialogueSceneTransition.Start called, hasStartedDialogue=" + hasStartedDialogue);
+
+        if (hasStartedDialogue)
+        {
+            Debug.Log("Dialogue already started, skipping");
+            return;
+        }
+
+        hasStartedDialogue = true;
+        StartDialogue();
+    }
+
+    void StartDialogue()
+    {
+        if (dialogueSystem == null)
+        {
+            Debug.LogError("DialogueSystem is not assigned!");
+            return;
+        }
+
+        Debug.Log("Starting dialogue: prologue_start");
+        dialogueSystem.StartDialogue("prologue_start", () =>
+        {
+            Debug.Log("Dialogue complete, loading next scene: " + nextScene);
+            SceneLoader.Instance?.LoadScene(nextScene);
+        });
     }
 }
