@@ -199,6 +199,14 @@ public class DialogueSystem : MonoBehaviour
     /// </summary>
     void ShowLine(DialogueLine line)
     {
+        if (line == null)
+        {
+            Debug.LogError("ShowLine: line is null!");
+            return;
+        }
+
+        Debug.Log($"ShowLine: {line.speaker} - {line.text}");
+
         // 更新角色亮度和表情
         UpdateCharacterHighlight(line.speaker);
 
@@ -211,7 +219,16 @@ public class DialogueSystem : MonoBehaviour
         }
 
         // 打字机效果显示文本
-        typewriter.TypeText(line.text);
+        if (typewriter != null && dialogueText != null)
+        {
+            typewriter.TypeText(line.text);
+        }
+        else
+        {
+            Debug.LogError("Typewriter or DialogueText is null!");
+            if (dialogueText != null)
+                dialogueText.text = line.text;
+        }
     }
 
     DialogueCharacter GetCharacter(string name)
