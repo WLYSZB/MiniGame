@@ -3,12 +3,13 @@ using UnityEngine.Video;
 using UnityEngine.UI;
 
 /// <summary>
-/// 开场CG视频播放 - 暂用2秒空白占位
+/// 开场CG视频播放 - 通过RawImage显示视频
 /// </summary>
 public class OpeningVideo : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
     public Button skipButton;
+    public RawImage videoDisplay;  // 视频显示UI
 
     void Start()
     {
@@ -16,10 +17,11 @@ public class OpeningVideo : MonoBehaviour
         {
             videoPlayer.Play();
             videoPlayer.loopPointReached += OnVideoEnd;
+            Debug.Log("视频开始播放");
         }
         else
         {
-            // 如果没有视频，直接跳到下一场景
+            Debug.Log("VideoPlayer为空，直接跳转");
             Invoke("GoToNextScene", 2f);
         }
 
@@ -29,7 +31,7 @@ public class OpeningVideo : MonoBehaviour
 
     void OnVideoEnd(VideoPlayer vp)
     {
-        // 视频播放完毕，进入下一场景
+        Debug.Log("视频播放完毕");
         SceneLoader.Instance?.LoadScene(SceneLoader.PROLOGUE_DIALOGUE);
     }
 
@@ -47,7 +49,6 @@ public class OpeningVideo : MonoBehaviour
 
     void Update()
     {
-        // 按任意键跳过（可选）
         if (Input.anyKeyDown)
         {
             SkipVideo();
