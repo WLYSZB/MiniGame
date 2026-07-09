@@ -18,7 +18,7 @@ public class DialogueLine
 public class EmotionSprite
 {
     public string emotion;        // 表情名
-    public Sprite sprite;         // 对应的立绘图片
+    public string spriteName;     // Sprite资源名（在Resources/Sprites/下）
 }
 
 [Serializable]
@@ -26,7 +26,7 @@ public class DialogueCharacterInfo
 {
     public string characterName;  // 角色名
     public Vector3 position;      // 场景中的位置
-    public Sprite defaultPortrait; // 默认立绘
+    public string defaultPortraitName; // 默认立绘资源名
     public EmotionSprite[] emotions; // 表情立绘列表
 }
 
@@ -38,6 +38,9 @@ public class DialogueSequence
     public DialogueCharacterInfo[] characters; // 参与对话的角色列表
 }
 
+/// <summary>
+/// 对话容器 - 用于JSON反序列化
+/// </summary>
 [Serializable]
 public class DialogueContainer
 {

@@ -27,10 +27,14 @@ public class DialogueSystem : MonoBehaviour
     private bool isDialogueActive = false;
     private System.Action onDialogueComplete;
 
+    // 对话数据缓存
+    private DialogueContainer dialogueData;
+
     void Awake()
     {
         dialoguePanel.SetActive(false);
         skipButton.onClick.AddListener(OnSkipAll);
+        LoadDialogueData();
     }
 
     void Update()
@@ -45,18 +49,38 @@ public class DialogueSystem : MonoBehaviour
     }
 
     /// <summary>
+    /// 从JSON文件加载对话数据
+    /// </summary>
+    void LoadDialogueData()
+    {
+        TextAsset jsonFile = Resources.Load<TextAsset>("Dialogue/dialogues");
+        if (jsonFile != null)
+        {
+            dialogueData = JsonUtility.FromJson<DialogueContainer>(jsonFile.text);
+        }
+        else
+        {
+            Debug.LogError("Dialogue JSON file not found!");
+        }
+    }
+
+    /// <summary>
     /// 开始对话序列
     /// </summary>
     public void StartDialogue(string sequenceId, System.Action onComplete = null)
     {
-        var container = Resources.Load<DialogueContainer>("Dialogue/dialogues");
-        if (container == null)
+        if (dialogueData == null)
         {
-            Debug.LogError("Dialogue data not found!");
+            LoadDialogueData();
+        }
+
+        if (dialogueData == null)
+        {
+            Debug.LogError("Dialogue data not loaded!");
             return;
         }
 
-        foreach (var seq in container.sequences)
+        foreach (var seq in dialogueData.sequences)
         {
             if (seq.id == sequenceId)
             {
@@ -105,7 +129,10 @@ public class DialogueSystem : MonoBehaviour
             charObj.transform.localPosition = info.position;
 
             SpriteRenderer sr = charObj.AddComponent<SpriteRenderer>();
-            sr.sprite = info.defaultPortrait;
+
+            // 加载默认立绘
+            Sprite defaultSprite = Resources.Load<Sprite>($"Sprites/Characters/{info.defaultPortraitName}");
+            sr.sprite = defaultSprite;
             sr.sortingOrder = 10; // 确保在背景之上
 
             DialogueCharacter dc = charObj.AddComponent<DialogueCharacter>();
@@ -114,9 +141,11 @@ public class DialogueSystem : MonoBehaviour
             // 注册表情立绘
             if (info.emotions != null)
             {
-                foreach (var emotionSprite in info.emotions)
+                foreach (var emotionData in info.emotions)
                 {
-                    dc.RegisterEmotion(emotionSprite.emotion, emotionSprite.sprite);
+                    Sprite emotionSprite = Resources.Load<Sprite>($"Sprites/Characters/{emotionData.spriteName}");
+                    if (emotionSprite != null)
+                        dc.RegisterEmotion(emotionData.emotion, emotionSprite);
                 }
             }
 

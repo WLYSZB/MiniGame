@@ -6,20 +6,20 @@
         {
           "characterName": "主控",
           "position": { "x": -2, "y": 0, "z": 0 },
+          "defaultPortraitName": "主控_默认",
           "emotions": [
-            { "emotion": "default", "sprite": "主控_默认" },
-            { "emotion": "confused", "sprite": "主控_疑惑" },
-            { "emotion": "embarrassed", "sprite": "主控_尴尬" }
+            { "emotion": "confused", "spriteName": "主控_疑惑" },
+            { "emotion": "embarrassed", "spriteName": "主控_尴尬" }
           ]
         },
         {
           "characterName": "比宿",
           "position": { "x": 2, "y": 0, "z": 0 },
+          "defaultPortraitName": "比宿_默认",
           "emotions": [
-            { "emotion": "default", "sprite": "比宿_默认" },
-            { "emotion": "angry", "sprite": "比宿_生气" },
-            { "emotion": "thinking", "sprite": "比宿_思考" },
-            { "emotion": "smile", "sprite": "比宿_核善微笑" }
+            { "emotion": "angry", "spriteName": "比宿_生气" },
+            { "emotion": "thinking", "spriteName": "比宿_思考" },
+            { "emotion": "smile", "spriteName": "比宿_核善微笑" }
           ]
         }
       ],
@@ -37,16 +37,15 @@
         {
           "characterName": "主控",
           "position": { "x": -2, "y": 0, "z": 0 },
-          "emotions": [
-            { "emotion": "default", "sprite": "主控_默认" }
-          ]
+          "defaultPortraitName": "主控_默认",
+          "emotions": []
         },
         {
           "characterName": "比宿",
           "position": { "x": 2, "y": 0, "z": 0 },
+          "defaultPortraitName": "比宿_默认",
           "emotions": [
-            { "emotion": "default", "sprite": "比宿_默认" },
-            { "emotion": "smile", "sprite": "比宿_核善微笑" }
+            { "emotion": "smile", "spriteName": "比宿_核善微笑" }
           ]
         }
       ],
@@ -61,26 +60,26 @@
         {
           "characterName": "主控",
           "position": { "x": -3, "y": 0, "z": 0 },
+          "defaultPortraitName": "主控_默认",
           "emotions": [
-            { "emotion": "default", "sprite": "主控_默认" },
-            { "emotion": "scared", "sprite": "主控_害怕" }
+            { "emotion": "scared", "spriteName": "主控_害怕" }
           ]
         },
         {
           "characterName": "比宿",
           "position": { "x": 0, "y": 0, "z": 0 },
+          "defaultPortraitName": "比宿_默认",
           "emotions": [
-            { "emotion": "default", "sprite": "比宿_默认" },
-            { "emotion": "smile", "sprite": "比宿_核善微笑" }
+            { "emotion": "smile", "spriteName": "比宿_核善微笑" }
           ]
         },
         {
           "characterName": "赫尔墨斯",
           "position": { "x": 3, "y": 0, "z": 0 },
+          "defaultPortraitName": "赫尔墨斯_默认",
           "emotions": [
-            { "emotion": "default", "sprite": "赫尔墨斯_默认" },
-            { "emotion": "confused", "sprite": "赫尔墨斯_蒙" },
-            { "emotion": "facepalm", "sprite": "赫尔墨斯_捂脸" }
+            { "emotion": "confused", "spriteName": "赫尔墨斯_蒙" },
+            { "emotion": "facepalm", "spriteName": "赫尔墨斯_捂脸" }
           ]
         }
       ],
