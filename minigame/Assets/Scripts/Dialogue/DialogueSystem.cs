@@ -20,6 +20,8 @@ public class DialogueSystem : MonoBehaviour
 
     [Header("Characters")]
     public Transform characterContainer; // 角色容器
+    [Range(0.1f, 2f)]
+    public float characterScale = 0.5f;  // 角色缩放比例（默认0.5，可调整）
 
     private List<DialogueCharacter> characters = new List<DialogueCharacter>();
     private DialogueSequence currentSequence;
@@ -137,6 +139,9 @@ public class DialogueSystem : MonoBehaviour
 
             DialogueCharacter dc = charObj.AddComponent<DialogueCharacter>();
             dc.characterName = info.characterName;
+
+            // 应用缩放
+            charObj.transform.localScale = Vector3.one * characterScale;
 
             // 注册表情立绘
             if (info.emotions != null)
