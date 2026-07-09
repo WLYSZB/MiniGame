@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PrologueBoard : MonoBehaviour
 {
-    private const float CellPixels = 56f;
-    private const float BoardMargin = 24f;
-
     [SerializeField] private float cellSize = 1f;
     [SerializeField] private PlayerController player;
     [SerializeField] private Vector2Int playerCell;
@@ -14,6 +11,10 @@ public class PrologueBoard : MonoBehaviour
     [SerializeField] private CoreTarget[] targets = new CoreTarget[0];
     [SerializeField] private CellMarker[] walls = new CellMarker[0];
     [SerializeField] private LevelUI levelUI;
+    [SerializeField] private Transform playerSprite;
+    [SerializeField] private Transform[] coreSprites = new Transform[0];
+    [SerializeField] private Transform[] targetSprites = new Transform[0];
+    [SerializeField] private Transform[] wallSprites = new Transform[0];
 
     private bool inputEnabled = true;
 
@@ -25,13 +26,16 @@ public class PrologueBoard : MonoBehaviour
             SnapPlayer();
         }
 
-        foreach (var core in cores)
+        for (int i = 0; i < cores.Length; i++)
         {
-            if (core != null)
+            if (cores[i] != null)
             {
-                core.SetCell(core.Cell, cellSize);
+                cores[i].SetCell(cores[i].Cell, cellSize);
+                SnapCore(i, cores[i].Cell);
             }
         }
+
+        SyncWallPositions();
     }
 
     public void SetInputEnabled(bool enabled)
@@ -61,6 +65,15 @@ public class PrologueBoard : MonoBehaviour
             if (movedCore != null)
             {
                 movedCore.SetCell(result.CoreToCell, cellSize);
+
+                for (int i = 0; i < cores.Length; i++)
+                {
+                    if (cores[i] == movedCore)
+                    {
+                        SnapCore(i, result.CoreToCell);
+                        break;
+                    }
+                }
             }
         }
 
@@ -72,7 +85,17 @@ public class PrologueBoard : MonoBehaviour
 
     private void SnapPlayer()
     {
-        player.transform.position = new Vector3(playerCell.x * cellSize, playerCell.y * cellSize, 0f);
+        var worldPos = new Vector3(playerCell.x * cellSize, playerCell.y * cellSize, 0f);
+
+        if (player != null)
+        {
+            player.transform.position = worldPos;
+        }
+
+        if (playerSprite != null)
+        {
+            playerSprite.position = worldPos;
+        }
     }
 
     private void CheckSolved()
@@ -93,78 +116,30 @@ public class PrologueBoard : MonoBehaviour
         }
     }
 
-    private void OnGUI()
+    private void SnapCore(int index, Vector2Int cell)
     {
-        var occupiedCells = new List<Vector2Int> { playerCell };
-        occupiedCells.AddRange(cores.Where(core => core != null).Select(core => core.Cell));
-        occupiedCells.AddRange(targets.Where(target => target != null).Select(target => target.Cell));
-        occupiedCells.AddRange(walls.Where(wall => wall != null).Select(wall => wall.Cell));
-
-        if (occupiedCells.Count == 0)
+        if (coreSprites == null || index >= coreSprites.Length || coreSprites[index] == null)
         {
             return;
         }
 
-        var minX = occupiedCells.Min(cell => cell.x) - 1;
-        var maxX = occupiedCells.Max(cell => cell.x) + 1;
-        var minY = occupiedCells.Min(cell => cell.y) - 1;
-        var maxY = occupiedCells.Max(cell => cell.y) + 1;
-
-        GUI.Label(new Rect(BoardMargin, 8f, 420f, 24f), "Push the backup core onto the target. Move with WASD or arrow keys.");
-
-        for (var y = maxY; y >= minY; y--)
-        {
-            for (var x = minX; x <= maxX; x++)
-            {
-                var cell = new Vector2Int(x, y);
-                var rect = new Rect(
-                    BoardMargin + (x - minX) * CellPixels,
-                    BoardMargin + (maxY - y) * CellPixels,
-                    CellPixels,
-                    CellPixels);
-
-                GUI.Box(rect, GetCellLabel(cell));
-            }
-        }
+        coreSprites[index].position = new Vector3(cell.x * cellSize, cell.y * cellSize, 0f);
     }
 
-    private string GetCellLabel(Vector2Int cell)
+    private void SyncWallPositions()
     {
-        var hasWall = walls.Any(wall => wall != null && wall.Cell == cell);
-        if (hasWall)
+        if (wallSprites == null || walls == null)
         {
-            return "#";
+            return;
         }
 
-        var hasPlayer = playerCell == cell;
-        var hasCore = cores.Any(core => core != null && core.Cell == cell);
-        var hasTarget = targets.Any(target => target != null && target.Cell == cell);
-
-        if (hasPlayer && hasTarget)
+        for (int i = 0; i < Mathf.Min(walls.Length, wallSprites.Length); i++)
         {
-            return "P/X";
+            if (walls[i] != null && wallSprites[i] != null)
+            {
+                var cell = walls[i].Cell;
+                wallSprites[i].position = new Vector3(cell.x * cellSize, cell.y * cellSize, 0f);
+            }
         }
-
-        if (hasCore && hasTarget)
-        {
-            return "C/X";
-        }
-
-        if (hasPlayer)
-        {
-            return "P";
-        }
-
-        if (hasCore)
-        {
-            return "C";
-        }
-
-        if (hasTarget)
-        {
-            return "X";
-        }
-
-        return string.Empty;
     }
 }
