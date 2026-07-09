@@ -5,10 +5,24 @@ using System.Collections;
 /// 可推动箱子 - 推箱子核心逻辑
 /// </summary>
 [RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class PushableBox : MonoBehaviour
 {
     private Vector2Int gridPos;
     public bool IsOnTarget { get; private set; } = false;
+
+    void Awake()
+    {
+        // 确保Rigidbody2D设置正确
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        rb.bodyType = RigidbodyType2D.Kinematic;
+
+        // 确保Collider2D是Trigger
+        BoxCollider2D col = GetComponent<BoxCollider2D>();
+        col.isTrigger = true;
+        col.size = new Vector2(0.9f, 0.9f);
+    }
 
     void Start()
     {
@@ -41,6 +55,34 @@ public class PushableBox : MonoBehaviour
             yield return null;
         }
         transform.position = target;
+
+        // 移动完成后重新检测是否在目标点上
+        CheckIfOnTarget();
+    }
+
+    void CheckIfOnTarget()
+    {
+        // 使用射线检测是否在目标点上
+        Collider2D[] hits = Physics2D.OverlapBoxAll(transform.position, new Vector2(0.4f, 0.4f), 0);
+        bool onTarget = false;
+        foreach (var hit in hits)
+        {
+            if (hit.CompareTag("Target"))
+            {
+                onTarget = true;
+                break;
+            }
+        }
+
+        if (onTarget && !IsOnTarget)
+        {
+            IsOnTarget = true;
+            CheckLevelComplete();
+        }
+        else if (!onTarget && IsOnTarget)
+        {
+            IsOnTarget = false;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)

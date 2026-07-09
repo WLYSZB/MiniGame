@@ -8,7 +8,14 @@ public class TargetPoint : MonoBehaviour
 {
     void Awake()
     {
-        GetComponent<Collider2D>().isTrigger = true;
+        // 确保Collider2D设置正确
+        BoxCollider2D col = GetComponent<BoxCollider2D>();
+        if (col == null)
+            col = gameObject.AddComponent<BoxCollider2D>();
+
+        col.isTrigger = true;
+        col.size = new Vector2(0.9f, 0.9f);
+
         gameObject.tag = "Target";
     }
 }
