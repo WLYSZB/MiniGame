@@ -20,8 +20,11 @@ public class DialogueSystem : MonoBehaviour
 
     [Header("Characters")]
     public Transform characterContainer; // 角色容器
-    [Range(0.1f, 2f)]
-    public float characterScale = 0.5f;  // 角色缩放比例（默认0.5，可调整）
+    [Range(0.1f, 1f)]
+    public float characterScale = 0.35f; // 角色缩放比例（默认0.35）
+    public float leftPositionX = -6f;    // 左侧角色X位置
+    public float rightPositionX = 6f;    // 右侧角色X位置
+    public float characterY = -1f;       // 角色Y位置（略低于中心）
 
     private List<DialogueCharacter> characters = new List<DialogueCharacter>();
     private DialogueSequence currentSequence;
@@ -124,18 +127,25 @@ public class DialogueSystem : MonoBehaviour
 
         if (characterInfos == null) return;
 
-        foreach (var info in characterInfos)
+        // 根据角色数量分配位置（左边、右边）
+        for (int i = 0; i < characterInfos.Length; i++)
         {
+            var info = characterInfos[i];
+
             GameObject charObj = new GameObject($"Character_{info.characterName}");
             charObj.transform.SetParent(characterContainer);
-            charObj.transform.localPosition = info.position;
+
+            // 分配位置：第一个角色在左，第二个在右
+            float posX = (i == 0) ? leftPositionX : rightPositionX;
+            charObj.transform.localPosition = new Vector3(posX, characterY, 0);
 
             SpriteRenderer sr = charObj.AddComponent<SpriteRenderer>();
 
             // 加载默认立绘
             Sprite defaultSprite = Resources.Load<Sprite>($"Sprites/Characters/{info.defaultPortraitName}");
             sr.sprite = defaultSprite;
-            sr.sortingOrder = 10; // 确保在背景之上
+            // 图层：背景是-10，UI是更高，角色在中间（5）
+            sr.sortingOrder = 5;
 
             DialogueCharacter dc = charObj.AddComponent<DialogueCharacter>();
             dc.characterName = info.characterName;
