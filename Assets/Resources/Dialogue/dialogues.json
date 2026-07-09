@@ -1,0 +1,96 @@
+{
+  "sequences": [
+    {
+      "id": "prologue_start",
+      "characters": [
+        {
+          "characterName": "主控",
+          "position": { "x": -2, "y": 0, "z": 0 },
+          "emotions": [
+            { "emotion": "default", "sprite": "主控_默认" },
+            { "emotion": "confused", "sprite": "主控_疑惑" },
+            { "emotion": "embarrassed", "sprite": "主控_尴尬" }
+          ]
+        },
+        {
+          "characterName": "比宿",
+          "position": { "x": 2, "y": 0, "z": 0 },
+          "emotions": [
+            { "emotion": "default", "sprite": "比宿_默认" },
+            { "emotion": "angry", "sprite": "比宿_生气" },
+            { "emotion": "thinking", "sprite": "比宿_思考" },
+            { "emotion": "smile", "sprite": "比宿_核善微笑" }
+          ]
+        }
+      ],
+      "lines": [
+        { "speaker": "主控", "text": "等等...我这是在哪？", "emotion": "confused" },
+        { "speaker": "比宿", "text": "哇！我的平衡器！！你个混蛋！", "emotion": "angry" },
+        { "speaker": "主控", "text": "对不起对不起！我不是故意的...", "emotion": "embarrassed" },
+        { "speaker": "比宿", "text": "算了...你得帮我一个忙。", "emotion": "thinking" },
+        { "speaker": "比宿", "text": "把这个核心放到星球们的工作台上。", "emotion": "default" }
+      ]
+    },
+    {
+      "id": "prologue_complete",
+      "characters": [
+        {
+          "characterName": "主控",
+          "position": { "x": -2, "y": 0, "z": 0 },
+          "emotions": [
+            { "emotion": "default", "sprite": "主控_默认" }
+          ]
+        },
+        {
+          "characterName": "比宿",
+          "position": { "x": 2, "y": 0, "z": 0 },
+          "emotions": [
+            { "emotion": "default", "sprite": "比宿_默认" },
+            { "emotion": "smile", "sprite": "比宿_核善微笑" }
+          ]
+        }
+      ],
+      "lines": [
+        { "speaker": "主控", "text": "这不很简单么！", "emotion": "default" },
+        { "speaker": "比宿", "text": "相信你已经熟练掌握了。^_^", "emotion": "smile" }
+      ]
+    },
+    {
+      "id": "chapter1_start",
+      "characters": [
+        {
+          "characterName": "主控",
+          "position": { "x": -3, "y": 0, "z": 0 },
+          "emotions": [
+            { "emotion": "default", "sprite": "主控_默认" },
+            { "emotion": "scared", "sprite": "主控_害怕" }
+          ]
+        },
+        {
+          "characterName": "比宿",
+          "position": { "x": 0, "y": 0, "z": 0 },
+          "emotions": [
+            { "emotion": "default", "sprite": "比宿_默认" },
+            { "emotion": "smile", "sprite": "比宿_核善微笑" }
+          ]
+        },
+        {
+          "characterName": "赫尔墨斯",
+          "position": { "x": 3, "y": 0, "z": 0 },
+          "emotions": [
+            { "emotion": "default", "sprite": "赫尔墨斯_默认" },
+            { "emotion": "confused", "sprite": "赫尔墨斯_蒙" },
+            { "emotion": "facepalm", "sprite": "赫尔墨斯_捂脸" }
+          ]
+        }
+      ],
+      "lines": [
+        { "speaker": "主控", "text": "其他人？", "emotion": "default" },
+        { "speaker": "比宿", "text": "所有星球在这里工作一辈子。", "emotion": "default" },
+        { "speaker": "比宿", "text": "让我们去找赫尔墨斯吧。", "emotion": "smile" },
+        { "speaker": "主控", "text": "这些火球你可没有说过！", "emotion": "scared" },
+        { "speaker": "比宿", "text": "^ ^怎么会呢？", "emotion": "smile" }
+      ]
+    }
+  ]
+}
