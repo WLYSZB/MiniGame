@@ -35,9 +35,6 @@ public class DialogueSystem : MonoBehaviour
     // 对话数据缓存
     private DialogueContainer dialogueData;
 
-    // 静态标志，防止多个实例同时开始对话
-    private static bool staticDialogueStarted = false;
-
     void Awake()
     {
         if (dialoguePanel != null)
@@ -81,17 +78,7 @@ public class DialogueSystem : MonoBehaviour
     /// </summary>
     public void StartDialogue(string sequenceId, System.Action onComplete = null)
     {
-        Debug.Log($"StartDialogue called with id: {sequenceId}, isDialogueActive={isDialogueActive}, staticFlag={staticDialogueStarted}");
-
-        // 如果对话已经在进行中，跳过
-        if (isDialogueActive || staticDialogueStarted)
-        {
-            Debug.Log("Dialogue already active or started, skipping StartDialogue call");
-            return;
-        }
-
-        // 设置静态标志
-        staticDialogueStarted = true;
+        Debug.Log($"StartDialogue called with id: {sequenceId}");
 
         if (dialogueData == null)
         {
@@ -104,8 +91,11 @@ public class DialogueSystem : MonoBehaviour
             return;
         }
 
+        Debug.Log($"Loaded {dialogueData.sequences.Length} dialogue sequences");
+
         foreach (var seq in dialogueData.sequences)
         {
+            Debug.Log($"Sequence id: {seq.id}");
             if (seq.id == sequenceId)
             {
                 currentSequence = seq;
@@ -119,7 +109,7 @@ public class DialogueSystem : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Starting dialogue: {currentSequence.id}, lines: {currentSequence.lines.Length}");
+        Debug.Log($"Found sequence: {currentSequence.id}, lines: {currentSequence.lines.Length}");
 
         onDialogueComplete = onComplete;
         currentLineIndex = 0;
@@ -215,7 +205,7 @@ public class DialogueSystem : MonoBehaviour
             return;
         }
 
-        Debug.Log($"ShowLine: index={currentLineIndex}, speaker={line.speaker}, text={line.text}");
+        Debug.Log($"ShowLine: {line.speaker} - {line.text}");
 
         // 更新角色亮度和表情
         UpdateCharacterHighlight(line.speaker);
@@ -231,8 +221,7 @@ public class DialogueSystem : MonoBehaviour
         // 打字机效果显示文本
         if (typewriter != null && dialogueText != null)
         {
-            // 直接显示完整文本，不用打字机效果
-            dialogueText.text = line.text;
+            typewriter.TypeText(line.text);
         }
         else
         {
@@ -274,27 +263,21 @@ public class DialogueSystem : MonoBehaviour
     /// </summary>
     void OnAdvance()
     {
-        Debug.Log($"OnAdvance called, IsTyping={typewriter?.IsTyping}, currentLineIndex={currentLineIndex}");
-
-        if (typewriter != null && typewriter.IsTyping)
+        if (typewriter.IsTyping)
         {
             // 跳过打字，直接显示完整文本
-            Debug.Log("Skipping typewriter");
             typewriter.Skip();
             return;
         }
 
         // 下一句
         currentLineIndex++;
-        Debug.Log($"Advancing to line {currentLineIndex}");
-
         if (currentLineIndex < currentSequence.lines.Length)
         {
             ShowLine(currentSequence.lines[currentLineIndex]);
         }
         else
         {
-            Debug.Log("Dialogue complete, ending...");
             EndDialogue();
         }
     }
@@ -310,10 +293,7 @@ public class DialogueSystem : MonoBehaviour
     void EndDialogue()
     {
         isDialogueActive = false;
-        staticDialogueStarted = false;
-
-        if (dialoguePanel != null)
-            dialoguePanel.SetActive(false);
+        dialoguePanel.SetActive(false);
 
         // 清除角色
         foreach (var character in characters)

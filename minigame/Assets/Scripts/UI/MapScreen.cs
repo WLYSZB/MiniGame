@@ -64,3 +64,23 @@ public class MapScreen : MonoBehaviour
         gameObject.SetActive(false);
     }
 }
+
+/// <summary>
+/// 地图节点UI
+/// </summary>
+public class MapNodeUI : MonoBehaviour
+{
+    public Image characterPortrait;
+    public TextMeshProUGUI characterName;
+    public GameObject lockIcon;
+
+    public void Setup(MapNodeData data)
+    {
+        characterPortrait.sprite = data.characterPortrait;
+        characterName.text = data.characterName;
+
+        bool unlocked = GameManager.Instance.IsLevelUnlocked(data.levelIndex);
+        lockIcon.SetActive(!unlocked);
+        characterPortrait.color = unlocked ? Color.white : Color.gray;
+    }
+}
