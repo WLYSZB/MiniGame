@@ -13,7 +13,6 @@ public class PrologueBoard : MonoBehaviour
     [SerializeField] private LevelUI levelUI;
     [SerializeField] private Transform playerSprite;
     [SerializeField] private Transform[] coreSprites = new Transform[0];
-    [SerializeField] private Transform[] targetSprites = new Transform[0];
     [SerializeField] private Transform[] wallSprites = new Transform[0];
 
     private bool inputEnabled = true;
