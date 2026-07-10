@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 关卡完成UI - 解锁下一关，下一关/返回菜单按钮
+/// Level complete UI
 /// </summary>
 public class LevelCompleteUI : MonoBehaviour
 {
@@ -12,28 +12,48 @@ public class LevelCompleteUI : MonoBehaviour
 
     void Awake()
     {
-        completePanel.SetActive(false);
-        nextButton.onClick.AddListener(OnNext);
-        menuButton.onClick.AddListener(OnMenu);
+        if (completePanel != null)
+            completePanel.SetActive(false);
+
+        if (nextButton != null)
+            nextButton.onClick.AddListener(OnNext);
+
+        if (menuButton != null)
+            menuButton.onClick.AddListener(OnMenu);
     }
 
     public void Show()
     {
-        completePanel.SetActive(true);
-        // 解锁下一关
-        int currentLevel = GameManager.Instance.CurrentLevel;
-        GameManager.Instance.UnlockLevel(currentLevel + 1);
+        Debug.Log("LevelCompleteUI.Show called");
+
+        if (completePanel != null)
+            completePanel.SetActive(true);
+
+        // Unlock next level
+        if (GameManager.Instance != null)
+        {
+            int currentLevel = GameManager.Instance.CurrentLevel;
+            GameManager.Instance.UnlockLevel(currentLevel + 1);
+        }
     }
 
     void OnNext()
     {
-        completePanel.SetActive(false);
-        GameManager.Instance.CompleteLevel();
+        if (completePanel != null)
+            completePanel.SetActive(false);
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.CompleteLevel();
     }
 
     void OnMenu()
     {
-        completePanel.SetActive(false);
-        GameManager.Instance.LoadMainMenu();
+        if (completePanel != null)
+            completePanel.SetActive(false);
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.LoadMainMenu();
+        else
+            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
     }
 }
