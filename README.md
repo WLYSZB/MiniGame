@@ -1,4 +1,4 @@
-# MiniGame
+# 宇宙特快入职指南
 
 小组 MiniGame 大赛参赛项目
 
