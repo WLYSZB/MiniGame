@@ -16,10 +16,10 @@ public class LevelCompleteUI : MonoBehaviour
             completePanel.SetActive(false);
 
         if (nextButton != null)
-            nextButton.onClick.AddListener(OnNext);
+            nextButton.onClick.AddListener(() => { AudioManager.Instance?.PlayClick(); OnNext(); });
 
         if (menuButton != null)
-            menuButton.onClick.AddListener(OnMenu);
+            menuButton.onClick.AddListener(() => { AudioManager.Instance?.PlayClick(); OnMenu(); });
     }
 
     public void Show()

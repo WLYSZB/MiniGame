@@ -12,13 +12,20 @@ public class PushableBox : MonoBehaviour
     private Vector2Int gridPos;
     public bool IsOnTarget { get; private set; } = false;
 
+    public System.Action<bool> OnTargetStateChanged;
+
+    [Header("Visual Feedback")]
+    public Color normalColor = Color.white;
+    public Color placedColor = new Color(0.3f, 1f, 0.5f, 1f); // 科技绿
+    private SpriteRenderer spriteRenderer;
+
     void Awake()
     {
-        // 确保Rigidbody2D设置正确
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Kinematic;
 
-        // 确保Collider2D是Trigger
         BoxCollider2D col = GetComponent<BoxCollider2D>();
         col.isTrigger = true;
         col.size = new Vector2(0.9f, 0.9f);
@@ -29,20 +36,22 @@ public class PushableBox : MonoBehaviour
         gridPos = GridManager.Instance.WorldToGrid(transform.position);
         transform.position = GridManager.Instance.GridToWorld(gridPos);
         GridManager.Instance.RegisterBox(gridPos, this);
+        OnTargetStateChanged += UpdateVisual;
+        UpdateVisual(IsOnTarget);
     }
 
     public bool TryPush(Vector2Int direction)
     {
         Vector2Int newPos = gridPos + direction;
 
-        // 箱子不能推入墙壁、障碍物或其他箱子
         if (GridManager.Instance.IsBlocked(newPos) || GridManager.Instance.IsBox(newPos))
             return false;
 
-        // 移动箱子
         GridManager.Instance.UnregisterBox(gridPos);
         gridPos = newPos;
         GridManager.Instance.RegisterBox(gridPos, this);
+        AudioManager.Instance?.PlaySFX(AudioManager.Instance.push);
+        FindObjectOfType<TutorialHint>()?.Dismiss();
         StartCoroutine(SmoothMove(GridManager.Instance.GridToWorld(newPos)));
         return true;
     }
@@ -55,14 +64,11 @@ public class PushableBox : MonoBehaviour
             yield return null;
         }
         transform.position = target;
-
-        // 移动完成后重新检测是否在目标点上
         CheckIfOnTarget();
     }
 
     void CheckIfOnTarget()
     {
-        // 使用射线检测是否在目标点上
         Collider2D[] hits = Physics2D.OverlapBoxAll(transform.position, new Vector2(0.4f, 0.4f), 0);
         bool onTarget = false;
         foreach (var hit in hits)
@@ -77,11 +83,14 @@ public class PushableBox : MonoBehaviour
         if (onTarget && !IsOnTarget)
         {
             IsOnTarget = true;
+            AudioManager.Instance?.PlaySFX(AudioManager.Instance.placed);
+            OnTargetStateChanged?.Invoke(true);
             CheckLevelComplete();
         }
         else if (!onTarget && IsOnTarget)
         {
             IsOnTarget = false;
+            OnTargetStateChanged?.Invoke(false);
         }
     }
 
@@ -90,6 +99,8 @@ public class PushableBox : MonoBehaviour
         if (other.CompareTag("Target"))
         {
             IsOnTarget = true;
+            AudioManager.Instance?.PlaySFX(AudioManager.Instance.placed);
+            OnTargetStateChanged?.Invoke(true);
             CheckLevelComplete();
         }
     }
@@ -97,12 +108,14 @@ public class PushableBox : MonoBehaviour
     void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Target"))
+        {
             IsOnTarget = false;
+            OnTargetStateChanged?.Invoke(false);
+        }
     }
 
     void CheckLevelComplete()
     {
-        // 检查所有箱子是否都在目标点上
         var boxes = FindObjectsOfType<PushableBox>();
         bool allOnTarget = true;
         foreach (var box in boxes)
@@ -118,7 +131,6 @@ public class PushableBox : MonoBehaviour
         {
             Debug.Log("Level Complete!");
 
-            // 优先使用LevelCompleteTrigger（先对话再完成）
             LevelCompleteTrigger trigger = FindObjectOfType<LevelCompleteTrigger>();
             if (trigger != null)
             {
@@ -126,9 +138,25 @@ public class PushableBox : MonoBehaviour
             }
             else
             {
-                // 直接显示完成界面
                 FindObjectOfType<LevelCompleteUI>()?.Show();
             }
         }
+    }
+
+    /// <summary>
+    /// 瞬间移动到指定位置（用于撤销）
+    /// </summary>
+    public void MoveInstant(Vector2Int newPos)
+    {
+        gridPos = newPos;
+        transform.position = GridManager.Instance.GridToWorld(newPos);
+        GridManager.Instance.RegisterBox(gridPos, this);
+        CheckIfOnTarget();
+    }
+
+    void UpdateVisual(bool onTarget)
+    {
+        if (spriteRenderer == null) return;
+        spriteRenderer.color = onTarget ? placedColor : normalColor;
     }
 }

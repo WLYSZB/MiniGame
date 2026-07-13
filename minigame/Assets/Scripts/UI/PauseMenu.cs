@@ -15,9 +15,9 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {
         pausePanel.SetActive(false);
-        resumeButton.onClick.AddListener(Resume);
-        restartButton.onClick.AddListener(Restart);
-        mainMenuButton.onClick.AddListener(BackToMenu);
+        resumeButton.onClick.AddListener(() => { AudioManager.Instance?.PlayClick(); Resume(); });
+        restartButton.onClick.AddListener(() => { AudioManager.Instance?.PlayClick(); Restart(); });
+        mainMenuButton.onClick.AddListener(() => { AudioManager.Instance?.PlayClick(); BackToMenu(); });
     }
 
     void Update()

@@ -8,11 +8,24 @@ using System.Collections;
 public class GridMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public int stepCount { get; private set; } = 0;
+    public System.Action<int> OnStepChanged;
+    public static bool IsLevelComplete { get; set; } = false;
+
+    public void DecrementStep()
+    {
+        stepCount--;
+        OnStepChanged?.Invoke(stepCount);
+    }
+
     private Vector2Int gridPos;
     private bool isMoving = false;
 
+    public bool IsMoving => isMoving;
+
     void Start()
     {
+        IsLevelComplete = false;
         gridPos = GridManager.Instance.WorldToGrid(transform.position);
         transform.position = GridManager.Instance.GridToWorld(gridPos);
     }
@@ -20,6 +33,18 @@ public class GridMovement : MonoBehaviour
     void Update()
     {
         if (isMoving) return;
+        if (IsLevelComplete) return;
+
+        // 撤销（Z键）
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            if (UndoManager.Instance != null)
+            {
+                UndoManager.Instance.Undo();
+                DecrementStep();
+            }
+            return;
+        }
 
         Vector2Int direction = Vector2Int.zero;
 
@@ -50,12 +75,24 @@ public class GridMovement : MonoBehaviour
             PushableBox box = GridManager.Instance.GetBox(newPos);
             if (box != null && box.TryPush(direction))
             {
+                // 记录状态后移动
+                if (UndoManager.Instance != null)
+                    UndoManager.Instance.Record();
+                AudioManager.Instance?.PlaySFX(AudioManager.Instance.footstep);
                 MoveTo(newPos);
+                stepCount++;
+                OnStepChanged?.Invoke(stepCount);
             }
             return;
         }
 
+        // 普通移动
+        if (UndoManager.Instance != null)
+            UndoManager.Instance.Record();
+        AudioManager.Instance?.PlaySFX(AudioManager.Instance.footstep);
         MoveTo(newPos);
+        stepCount++;
+        OnStepChanged?.Invoke(stepCount);
     }
 
     void MoveTo(Vector2Int newPos)
@@ -74,5 +111,14 @@ public class GridMovement : MonoBehaviour
         }
         transform.position = target;
         isMoving = false;
+    }
+
+    /// <summary>
+    /// 瞬间移动到指定网格位置（用于撤销）
+    /// </summary>
+    public void MoveInstant(Vector2Int newPos)
+    {
+        gridPos = newPos;
+        transform.position = GridManager.Instance.GridToWorld(newPos);
     }
 }

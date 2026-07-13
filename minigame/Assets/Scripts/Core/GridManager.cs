@@ -46,6 +46,13 @@ public class GridManager : MonoBehaviour
         );
     }
 
+    public Dictionary<Vector2Int, PushableBox> GetAllBoxes() => boxes;
+
+    public void UnregisterAllBoxes()
+    {
+        boxes.Clear();
+    }
+
     public void Clear()
     {
         walls.Clear();

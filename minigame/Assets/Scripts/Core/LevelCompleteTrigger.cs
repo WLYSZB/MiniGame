@@ -17,7 +17,9 @@ public class LevelCompleteTrigger : MonoBehaviour
     /// </summary>
     public void OnLevelComplete()
     {
-        // 先播放对话
+        GridMovement.IsLevelComplete = true;
+        AudioManager.Instance?.PlaySFX(AudioManager.Instance.win);
+
         if (dialogueSystem != null)
         {
             dialogueSystem.StartDialogue(completionDialogueId, () =>

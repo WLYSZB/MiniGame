@@ -11,6 +11,8 @@ public class OpeningVideo : MonoBehaviour
     public Button skipButton;
     public RawImage videoDisplay;  // 视频显示UI
 
+    private bool hasTransitioned = false;
+
     void Start()
     {
         if (videoPlayer != null)
@@ -32,23 +34,28 @@ public class OpeningVideo : MonoBehaviour
     void OnVideoEnd(VideoPlayer vp)
     {
         Debug.Log("视频播放完毕");
-        SceneLoader.Instance?.LoadScene(SceneLoader.PROLOGUE_DIALOGUE);
+        GoToNextScene();
     }
 
     void SkipVideo()
     {
+        if (hasTransitioned) return;
         if (videoPlayer != null && videoPlayer.isPlaying)
             videoPlayer.Stop();
-        SceneLoader.Instance?.LoadScene(SceneLoader.PROLOGUE_DIALOGUE);
+        GoToNextScene();
     }
 
     void GoToNextScene()
     {
+        if (hasTransitioned) return;
+        hasTransitioned = true;
+        enabled = false;
         SceneLoader.Instance?.LoadScene(SceneLoader.PROLOGUE_DIALOGUE);
     }
 
     void Update()
     {
+        if (hasTransitioned) return;
         if (Input.anyKeyDown)
         {
             SkipVideo();
