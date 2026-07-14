@@ -29,3 +29,6 @@ screenshots/
 
 # Logs
 *.log
+
+# Large files
+Assets/TextMesh Pro/
