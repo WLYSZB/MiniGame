@@ -1,0 +1,31 @@
+﻿# Unity
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]serSettings/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.csproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Codely
+.codely-cli/tmp/
+
+# Screenshots
+screenshots/
+
+# Logs
+*.log

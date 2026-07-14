@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 自动生成墙壁和地板
+/// 自动生成墙壁和地板（支持等距视角）
 /// </summary>
 public class WallGenerator : MonoBehaviour
 {
@@ -34,24 +34,25 @@ public class WallGenerator : MonoBehaviour
             return;
         }
 
-        // 获取预制体的原始scale
         Vector3 originalScale = wallPrefab.transform.localScale;
 
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                // 只生成边界墙壁
                 if (x == 0 || x == width - 1 || y == 0 || y == height - 1)
                 {
-                    Vector3 pos = new Vector3(x - width / 2, y - height / 2, 0);
+                    Vector2Int gridPos = new Vector2Int(x - width / 2, y - height / 2);
+                    Vector3 pos = GridManager.Instance != null
+                        ? GridManager.Instance.GridToWorld(gridPos)
+                        : new Vector3(gridPos.x, gridPos.y, 0);
                     GameObject wall = Instantiate(wallPrefab, pos, Quaternion.identity, transform);
                     wall.name = $"Wall_{x}_{y}";
-                    // 保持预制体的原始scale
                     wall.transform.localScale = originalScale;
 
-                    // 注册到GridManager
-                    Vector2Int gridPos = new Vector2Int(x - width / 2, y - height / 2);
+                    var sr = wall.GetComponent<SpriteRenderer>();
+                    if (sr != null) sr.sortingOrder = -y * 2;
+
                     GridManager.Instance?.RegisterWall(gridPos);
                 }
             }
@@ -69,18 +70,22 @@ public class WallGenerator : MonoBehaviour
             return;
         }
 
-        // 获取预制体的原始scale
         Vector3 originalScale = floorPrefab.transform.localScale;
 
         for (int x = 1; x < width - 1; x++)
         {
             for (int y = 1; y < height - 1; y++)
             {
-                Vector3 pos = new Vector3(x - width / 2, y - height / 2, 0);
+                Vector2Int gridPos = new Vector2Int(x - width / 2, y - height / 2);
+                Vector3 pos = GridManager.Instance != null
+                    ? GridManager.Instance.GridToWorld(gridPos)
+                    : new Vector3(gridPos.x, gridPos.y, 0);
                 GameObject floor = Instantiate(floorPrefab, pos, Quaternion.identity, transform);
                 floor.name = $"Floor_{x}_{y}";
-                // 保持预制体的原始scale
                 floor.transform.localScale = originalScale;
+
+                var sr = floor.GetComponent<SpriteRenderer>();
+                if (sr != null) sr.sortingOrder = -y * 2 - 1;
             }
         }
     }

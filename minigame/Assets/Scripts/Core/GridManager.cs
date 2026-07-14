@@ -9,6 +9,7 @@ public class GridManager : MonoBehaviour
     public static GridManager Instance { get; private set; }
 
     public float cellSize = 1f;
+    public bool useIsometric = false;
     private HashSet<Vector2Int> walls = new HashSet<Vector2Int>();
     private HashSet<Vector2Int> obstacles = new HashSet<Vector2Int>();
     private Dictionary<Vector2Int, PushableBox> boxes = new Dictionary<Vector2Int, PushableBox>();
@@ -35,11 +36,25 @@ public class GridManager : MonoBehaviour
 
     public Vector3 GridToWorld(Vector2Int gridPos)
     {
+        if (useIsometric)
+        {
+            float isoX = (gridPos.x - gridPos.y) * cellSize * 0.5f;
+            float isoY = (gridPos.x + gridPos.y) * cellSize * 0.25f;
+            return new Vector3(isoX, isoY, 0);
+        }
         return new Vector3(gridPos.x * cellSize, gridPos.y * cellSize, 0);
     }
 
     public Vector2Int WorldToGrid(Vector3 worldPos)
     {
+        if (useIsometric)
+        {
+            float x = worldPos.x / (cellSize * 0.5f);
+            float y = worldPos.y / (cellSize * 0.25f);
+            int gridX = Mathf.RoundToInt((x + y) / 2f);
+            int gridY = Mathf.RoundToInt((y - x) / 2f);
+            return new Vector2Int(gridX, gridY);
+        }
         return new Vector2Int(
             Mathf.RoundToInt(worldPos.x / cellSize),
             Mathf.RoundToInt(worldPos.y / cellSize)

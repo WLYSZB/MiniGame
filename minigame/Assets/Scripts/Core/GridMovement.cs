@@ -20,12 +20,14 @@ public class GridMovement : MonoBehaviour
 
     private Vector2Int gridPos;
     private bool isMoving = false;
+    private PlayerAnimator playerAnimator;
 
     public bool IsMoving => isMoving;
 
     void Start()
     {
         IsLevelComplete = false;
+        playerAnimator = GetComponent<PlayerAnimator>();
         gridPos = GridManager.Instance.WorldToGrid(transform.position);
         transform.position = GridManager.Instance.GridToWorld(gridPos);
     }
@@ -58,7 +60,11 @@ public class GridMovement : MonoBehaviour
             direction = Vector2Int.right;
 
         if (direction != Vector2Int.zero)
+        {
+            if (playerAnimator != null)
+                playerAnimator.OnMoveStart(direction);
             TryMove(direction);
+        }
     }
 
     void TryMove(Vector2Int direction)
@@ -111,6 +117,8 @@ public class GridMovement : MonoBehaviour
         }
         transform.position = target;
         isMoving = false;
+        if (playerAnimator != null)
+            playerAnimator.OnMoveEnd();
     }
 
     /// <summary>
